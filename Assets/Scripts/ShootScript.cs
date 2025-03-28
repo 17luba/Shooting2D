@@ -65,7 +65,9 @@ public class ShootScript : MonoBehaviour
     void Shoot()
     {
         GameObject BulletIns = Instantiate(Bullet, ShootPoint.position, ShootPoint.rotation);
-        BulletIns.GetComponent<Rigidbody2D>().AddForce(BulletIns.transform.right * BulletSpeed);
+        //BulletIns.GetComponent<Rigidbody2D>().AddForce(BulletIns.transform.right * BulletSpeed);
+        Rigidbody2D rb = BulletIns.GetComponent<Rigidbody2D>();
+        rb.velocity = ShootPoint.right * BulletSpeed;
         GunAnimator.SetTrigger("Shoot");
         CameraShaker.Instance.ShakeOnce(1.2f, 0.8f, 0.1f, 0.15f);
         Destroy(BulletIns, 1.5f);
