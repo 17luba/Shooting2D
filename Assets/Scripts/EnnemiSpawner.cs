@@ -1,22 +1,28 @@
 using UnityEngine;
 
-public class EnnemiSpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour
 {
-    public GameObject EnnemiPrefab;
-    public float SpawnInterval = 3f;
-
+    public GameObject EnemyPrefab;
     public Transform[] SpawnPoints;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private float nextSpawnTime;
+
+    void Update()
     {
-        InvokeRepeating("SpawnEnnemy", 0f, SpawnInterval);
+        if (Time.time > nextSpawnTime)
+        {
+            nextSpawnTime = Time.time + GameManager.Instance.GetEnemySpawnRate(); // Fréquence d'apparition dynamique
+            SpawnEnemy();
+        }
     }
 
-    // Update is called once per frame
-    void SpawnEnnemy()
+    void SpawnEnemy()
     {
-        int randonIndex = Random.Range(0, SpawnPoints.Length);
-        Instantiate(EnnemiPrefab, SpawnPoints[randonIndex].position, Quaternion.identity);
+        // Choisir un point de spawn aléatoire
+        Transform spawnPoint = SpawnPoints[Random.Range(0, SpawnPoints.Length)];
+        GameObject enemy = Instantiate(EnemyPrefab, spawnPoint.position, Quaternion.identity);
+
+        // Ajuster la vitesse de l'ennemi
+        enemy.GetComponent<EnemyMovement>().SetSpeed(GameManager.Instance.GetEnemySpeed());
     }
 }

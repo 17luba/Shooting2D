@@ -1,38 +1,34 @@
 using UnityEngine;
 
-public class EnnemiScript : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
-    public float Speed = 2;
     private Transform player;
+    private float speed = 2f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Trouver le joueur
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (player != null)
         {
-            // Deplacer l'ennemi vers le jouer
-            transform.position = Vector2.MoveTowards(transform.position, player.position, Speed * Time.deltaTime);
+            // Déplacement vers le joueur
+            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    public void SetSpeed(float newSpeed)
     {
-        // Detruire l'ennemi
-        if (collision.CompareTag("Bullet"))
+        speed = newSpeed;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
         {
-            Debug.Log("Ennemi touché par la balle");
-
-            Destroy(gameObject);
-
-            Destroy(collision.gameObject);
-            GameManager.Instance.IncrementKillCount();
+            GameManager.Instance.GameOver(); // Appeler le Game Over
         }
     }
 }
