@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private int killCount = 0; // nombre d'ennemi tués
 
     public GameObject GameOverPanel;
+    public TextMeshProUGUI FinalScoreText;
+    public TextMeshProUGUI BestScoreText;
     public Button RetryButton;
 
     private float enemySpawnRate = 2f;
@@ -60,8 +62,21 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        GameOverPanel.SetActive(true);
+        GameOverPanel.SetActive(true); // Afficher le panel
         Time.timeScale = 0f; // Mettre le jeu en pause
+
+        FinalScoreText.text = "Score " + killCount; // Afficher le score de la partie
+
+        // Gerer le meilleur score
+        int bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        if (killCount > bestScore)
+        {
+            PlayerPrefs.SetInt("BestScore", killCount);
+            PlayerPrefs.Save();
+            bestScore = killCount; // Mettre à jour immédiatement la valeur affichée
+        }
+
+        BestScoreText.text = "Best Score " + bestScore; // Afficher le meilleur score
     }
 
     public void RestartGame()
