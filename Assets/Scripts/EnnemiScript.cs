@@ -26,6 +26,15 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Bullet"))
+        {
+            Destroy(gameObject); // Detruire l'ennemi
+
+            Destroy(collision.gameObject); // Detruire la balle après la collision
+
+            GameManager.Instance.IncrementKillCount(); // Incrémenter le nombre d'ennemis tués
+        }
+
         if (collision.CompareTag("Player"))
         {
             GameManager.Instance.GameOver(); // Appeler le Game Over
